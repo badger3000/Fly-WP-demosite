@@ -1,16 +1,11 @@
 # Start with official WordPress image
 FROM wordpress:6.4-php8.2-apache
 
-# Install additional PHP extensions for PostgreSQL
-RUN apt-get update && apt-get install -y libpq-dev unzip curl \
-    && docker-php-ext-install opcache pdo pdo_pgsql pgsql
+# Install additional PHP extensions
+RUN docker-php-ext-install opcache
 
 # Copy our custom wp-content over the default
 COPY wp-content/ /var/www/html/wp-content/
-
-# Create a simple PostgreSQL database driver for WordPress
-RUN curl -L https://raw.githubusercontent.com/WordPress/wordpress-develop/trunk/tests/phpunit/data/plugins/postgresql-for-wordpress/pg4wp/pg4wp.php -o /var/www/html/wp-content/pg4wp.php || \
-    echo '<?php /* PostgreSQL adapter placeholder - WordPress will use PDO directly */ ?>' > /var/www/html/wp-content/pg4wp.php
 
 # Create uploads directory and set permissions
 RUN mkdir -p /var/www/html/wp-content/uploads

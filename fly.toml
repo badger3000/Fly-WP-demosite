@@ -12,6 +12,9 @@ primary_region = 'sjc'
 [env]
   WP_DEBUG = 'false'
   WP_ENVIRONMENT_TYPE = 'production'
+  WORDPRESS_DB_NAME = 'wordpress'
+  WORDPRESS_DB_HOST = 'flywp-mysql.internal'
+  WORDPRESS_CONFIG_EXTRA = "define('WP_HOME', 'https://flywp.fly.dev'); define('WP_SITEURL', 'https://flywp.fly.dev');"
 
 [[mounts]]
   source = 'wp_uploads'

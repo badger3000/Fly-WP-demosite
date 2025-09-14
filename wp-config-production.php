@@ -3,19 +3,11 @@
  * Production WordPress Configuration
  */
 
-// Database Configuration from Environment
-if (isset($_ENV['DATABASE_URL'])) {
-    $db_parts = parse_url($_ENV['DATABASE_URL']);
-    define('DB_NAME', ltrim($db_parts['path'], '/'));
-    define('DB_USER', $db_parts['user']);
-    define('DB_PASSWORD', $db_parts['pass']);
-    define('DB_HOST', $db_parts['host'] . ':' . ($db_parts['port'] ?? 5432));
-} else {
-    define('DB_NAME', $_ENV['DB_NAME'] ?? 'wordpress');
-    define('DB_USER', $_ENV['DB_USER'] ?? 'root');
-    define('DB_PASSWORD', $_ENV['DB_PASSWORD'] ?? '');
-    define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
-}
+// Database Configuration - MySQL
+define('DB_NAME', $_ENV['WORDPRESS_DB_NAME'] ?? 'wordpress');
+define('DB_USER', $_ENV['WORDPRESS_DB_USER'] ?? 'wordpress_user');
+define('DB_PASSWORD', $_ENV['WORDPRESS_DB_PASSWORD'] ?? '');
+define('DB_HOST', $_ENV['WORDPRESS_DB_HOST'] ?? 'flywp-mysql.internal');
 
 define('DB_CHARSET', 'utf8');
 define('DB_COLLATE', '');
