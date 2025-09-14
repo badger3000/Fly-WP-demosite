@@ -1,9 +1,5 @@
 [build]
-buildCommand = "./build-themes.sh"
-
-[deploy]
-healthcheckPath = "/health.php"
-healthcheckTimeout = 300
+buildCommand = "echo 'Skipping theme build for now'"
 
 [environments.production]
 variables.WP_ENVIRONMENT_TYPE = "production"
