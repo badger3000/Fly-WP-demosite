@@ -1,0 +1,65 @@
+name: Build Themes & Deploy to Fly.io
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout wp-content
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl, zip
+
+      # Build Sage10 FSE Theme
+      - name: Build Sage10 FSE
+        run: |
+          if [ -d "wp-content/themes/sage10-fse" ]; then
+            cd wp-content/themes/sage10-fse
+            npm ci --production=false
+            if [ -f "composer.json" ]; then
+              composer install --no-dev --optimize-autoloader
+            fi
+            npm run build
+            rm -rf node_modules src
+          fi
+
+      # Build Block Theme
+      - name: Build Block Theme
+        run: |
+          if [ -d "wp-content/themes/block-theme" ]; then
+            cd wp-content/themes/block-theme
+            npm ci --production=false
+            npm run build
+            rm -rf node_modules src
+          fi
+
+      # Clean up development files
+      - name: Clean build artifacts
+        run: |
+          find . -name "*.map" -delete
+          find . -name "package.json" -delete
+          find . -name "composer.json" -delete
+          find . -name "*.lock" -delete
+          find . -name ".git*" -delete
+
+      # Deploy to Fly.io
+      - name: Setup Fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
