@@ -1,4 +1,4 @@
-app = "your-wordpress-site"
+app = "flywp"
 primary_region = "sjc"
 
 [build]
@@ -26,6 +26,7 @@ primary_region = "sjc"
 
 [checks]
   [checks.wordpress_health]
+    type = "http"
     grace_period = "10s"
     interval = "30s"
     method = "get"
