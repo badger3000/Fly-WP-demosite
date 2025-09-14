@@ -1,0 +1,10 @@
+[phases.build]
+cmds = [
+  "cd wp-content/themes/sage && npm ci && composer install --no-dev --optimize-autoloader && npm run build"
+]
+
+[phases.setup]
+nixPkgs = ["php", "nodejs", "nginx"]
+
+[start]
+cmd = "php -S 0.0.0.0:$PORT"

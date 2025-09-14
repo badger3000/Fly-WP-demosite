@@ -16,9 +16,8 @@ This repository contains a WordPress site with custom themes deployed to Railway
 ├── .github/workflows/deploy.yml    # CI/CD pipeline for Railway
 ├── wp-content/                     # WordPress themes and plugins
 │   ├── themes/
-│   │   ├── sage/                   # Sage theme (Laravel Blade + Tailwind)
-│   │   ├── sage10-fse/             # Sage 10 FSE theme
-│   │   ├── block-theme/            # Custom block theme
+│   │   ├── sage10-fse/             # Sage 10 FSE theme (tracked)
+│   │   ├── block-theme/            # Custom block theme (tracked)
 │   │   ├── frost/                  # WordPress core theme
 │   │   └── twentytwentyfive/       # WordPress core theme
 │   └── plugins/                    # WordPress plugins
@@ -36,7 +35,7 @@ This repository contains a WordPress site with custom themes deployed to Railway
 2. **Build ALL tracked themes automatically**:
    - Scans `wp-content/themes/` for any theme with `package.json`
    - Builds each theme with npm/composer
-   - Currently building: `sage`, `sage10-fse`, `block-theme`
+   - Currently building: `sage10-fse`, `block-theme`
 3. **Clean up** development files (node_modules, etc.)
 4. **Deploy to Railway** automatically
 5. **WordPress runs** with Railway MySQL database

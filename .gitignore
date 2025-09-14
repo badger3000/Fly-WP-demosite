@@ -1,0 +1,80 @@
+# Exclude everything by default
+*
+
+# Include only wp-content folder
+!wp-content/
+
+# Exclude everything in wp-content by default
+wp-content/*
+
+# Include deployment configuration files
+!.gitignore
+!.github/
+!.github/**
+!Dockerfile
+!railway.toml
+!nixpacks.toml
+!wp-config-railway.php
+!build-themes.sh
+!RAILWAY-SETUP.md
+!README.md
+!CLAUDE.md
+
+# Include only specific themes we want to track
+!wp-content/themes/
+wp-content/themes/*
+!wp-content/themes/sage10-fse/
+!wp-content/themes/block-theme/
+
+# EXCLUDE development files and build artifacts from themes FIRST
+wp-content/themes/*/node_modules/
+wp-content/themes/*/package-lock.json
+wp-content/themes/*/yarn.lock
+wp-content/themes/*/composer.lock
+wp-content/themes/*/public/build/
+wp-content/themes/*/dist/
+wp-content/themes/*/.bud/
+wp-content/themes/*/src/
+wp-content/themes/*/.env*
+wp-content/themes/*/.git
+
+# Then include the themes with exclusions applied
+
+!wp-content/themes/sage10-fse/**
+!wp-content/themes/block-theme/**
+
+# But re-exclude the development files to be extra sure
+wp-content/themes/sage/node_modules/
+wp-content/themes/sage10-fse/node_modules/
+wp-content/themes/block-theme/node_modules/
+wp-content/themes/sage/src/
+wp-content/themes/sage10-fse/src/
+wp-content/themes/block-theme/src/
+
+# Include plugins directory if you want to track custom plugins
+!wp-content/plugins/
+wp-content/plugins/*
+# Uncomment specific plugins you want to track:
+# !wp-content/plugins/your-custom-plugin/
+
+# Include built assets
+!wp-content/themes/*/public/
+!wp-content/themes/*/css/
+!wp-content/themes/*/js/
+
+# Exclude uploads (handled by Fly volume)
+wp-content/uploads/
+
+# Exclude cache and logs
+*.log
+wp-content/cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local development files
+wp-config.php
+wp-config-local.php
+.env
+.env.local
