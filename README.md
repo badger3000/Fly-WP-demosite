@@ -17,11 +17,14 @@ This repository contains a WordPress site with custom themes deployed to Railway
 ├── wp-content/                     # WordPress themes and plugins
 │   ├── themes/
 │   │   ├── sage/                   # Sage theme (Laravel Blade + Tailwind)
+│   │   ├── sage10-fse/             # Sage 10 FSE theme
+│   │   ├── block-theme/            # Custom block theme
 │   │   ├── frost/                  # WordPress core theme
 │   │   └── twentytwentyfive/       # WordPress core theme
 │   └── plugins/                    # WordPress plugins
 ├── Dockerfile                      # Railway container config
 ├── railway.toml                    # Railway build configuration
+├── build-themes.sh                 # Automatic theme builder script
 ├── nixpacks.toml                   # Nixpacks build settings
 ├── wp-config-railway.php           # Railway WordPress config
 └── README.md                       # This file
@@ -30,9 +33,10 @@ This repository contains a WordPress site with custom themes deployed to Railway
 ## 🚀 Deployment Process
 
 1. **Push to main** → GitHub Actions triggered
-2. **Build themes**:
-   - `sage`: Uses Vite + Laravel Blade (`npm run build`)
-   - Other themes: Build if package.json exists
+2. **Build ALL tracked themes automatically**:
+   - Scans `wp-content/themes/` for any theme with `package.json`
+   - Builds each theme with npm/composer
+   - Currently building: `sage`, `sage10-fse`, `block-theme`
 3. **Clean up** development files (node_modules, etc.)
 4. **Deploy to Railway** automatically
 5. **WordPress runs** with Railway MySQL database

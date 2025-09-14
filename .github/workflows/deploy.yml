@@ -23,37 +23,14 @@ jobs:
           php-version: '8.2'
           extensions: mbstring, intl, zip
 
-      # Build Sage Theme
-      - name: Build Sage Theme
+      # Build all themes dynamically
+      - name: Build All Themes
         run: |
-          if [ -d "wp-content/themes/sage" ]; then
-            cd wp-content/themes/sage
-            npm ci --production=false
-            if [ -f "composer.json" ]; then
-              composer install --no-dev --optimize-autoloader
-            fi
-            npm run build
-            rm -rf node_modules resources/css resources/js resources/images resources/fonts
-          fi
+          # Make build script executable
+          chmod +x build-themes.sh
 
-      # Build other themes if they exist
-      - name: Build Additional Themes
-        run: |
-          for theme_dir in wp-content/themes/*/; do
-            if [ -f "${theme_dir}package.json" ] && [ "${theme_dir}" != "wp-content/themes/sage/" ]; then
-              echo "Building theme: ${theme_dir}"
-              cd "${theme_dir}"
-              npm ci --production=false
-              if [ -f "composer.json" ]; then
-                composer install --no-dev --optimize-autoloader
-              fi
-              if npm run | grep -q "build"; then
-                npm run build
-              fi
-              rm -rf node_modules src resources
-              cd - > /dev/null
-            fi
-          done
+          # Run the build script
+          ./build-themes.sh
 
       # Clean up development files for Railway deployment
       - name: Clean build artifacts
@@ -63,7 +40,9 @@ jobs:
           find . -name "vite.*.js" -delete
           find . -name "tailwind.*.js" -delete
           find . -name ".git*" -not -name ".github" -delete
-          find . -name "README.md" -not -path "./README.md" -delete
+          # Keep package.json and composer.json files as they might be needed for Railway
+          # Remove node_modules which should already be removed by theme builds
+          find . -name "node_modules" -type d -exec rm -rf {} + 2>/dev/null || true
 
       # Deploy to Railway
       - name: Deploy to Railway

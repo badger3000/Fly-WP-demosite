@@ -7,14 +7,14 @@ RUN docker-php-ext-install opcache
 # Copy our custom wp-content over the default
 COPY wp-content/ /var/www/html/wp-content/
 
+# Copy Railway wp-config (wp-content repo structure)
+COPY wp-config-railway.php /var/www/html/wp-config.php
+
 # Create uploads directory and set permissions
 RUN mkdir -p /var/www/html/wp-content/uploads
 RUN chown -R www-data:www-data /var/www/html/wp-content
 RUN find /var/www/html/wp-content -type d -exec chmod 755 {} \;
 RUN find /var/www/html/wp-content -type f -exec chmod 644 {} \;
-
-# Copy Railway wp-config
-COPY wp-config-railway.php /var/www/html/wp-config.php
 
 # Enable mod_rewrite for pretty URLs
 RUN a2enmod rewrite
@@ -33,5 +33,10 @@ Header always set X-XSS-Protection "1; mode=block"' > /etc/apache2/conf-availabl
 
 RUN a2enconf wordpress-security
 RUN a2enmod headers
+
+# Set proper WordPress file permissions
+RUN chown -R www-data:www-data /var/www/html
+RUN find /var/www/html -type d -exec chmod 755 {} \;
+RUN find /var/www/html -type f -exec chmod 644 {} \;
 
 EXPOSE 80
