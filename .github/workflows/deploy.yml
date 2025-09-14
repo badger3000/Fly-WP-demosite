@@ -1,4 +1,4 @@
-name: Build Themes & Deploy to Fly.io
+name: Build Themes & Deploy to Railway
 
 on:
   push:
@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout wp-content
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js 20
@@ -23,43 +23,52 @@ jobs:
           php-version: '8.2'
           extensions: mbstring, intl, zip
 
-      # Build Sage10 FSE Theme
-      - name: Build Sage10 FSE
+      # Build Sage Theme
+      - name: Build Sage Theme
         run: |
-          if [ -d "wp-content/themes/sage10-fse" ]; then
-            cd wp-content/themes/sage10-fse
+          if [ -d "wp-content/themes/sage" ]; then
+            cd wp-content/themes/sage
             npm ci --production=false
             if [ -f "composer.json" ]; then
               composer install --no-dev --optimize-autoloader
             fi
             npm run build
-            rm -rf node_modules src
+            rm -rf node_modules resources/css resources/js resources/images resources/fonts
           fi
 
-      # Build Block Theme
-      - name: Build Block Theme
+      # Build other themes if they exist
+      - name: Build Additional Themes
         run: |
-          if [ -d "wp-content/themes/block-theme" ]; then
-            cd wp-content/themes/block-theme
-            npm ci --production=false
-            npm run build
-            rm -rf node_modules src
-          fi
+          for theme_dir in wp-content/themes/*/; do
+            if [ -f "${theme_dir}package.json" ] && [ "${theme_dir}" != "wp-content/themes/sage/" ]; then
+              echo "Building theme: ${theme_dir}"
+              cd "${theme_dir}"
+              npm ci --production=false
+              if [ -f "composer.json" ]; then
+                composer install --no-dev --optimize-autoloader
+              fi
+              if npm run | grep -q "build"; then
+                npm run build
+              fi
+              rm -rf node_modules src resources
+              cd - > /dev/null
+            fi
+          done
 
-      # Clean up development files
+      # Clean up development files for Railway deployment
       - name: Clean build artifacts
         run: |
           find . -name "*.map" -delete
-          find . -name "package.json" -delete
-          find . -name "composer.json" -delete
-          find . -name "*.lock" -delete
-          find . -name ".git*" -delete
+          find . -name "webpack.*.js" -delete
+          find . -name "vite.*.js" -delete
+          find . -name "tailwind.*.js" -delete
+          find . -name ".git*" -not -name ".github" -delete
+          find . -name "README.md" -not -path "./README.md" -delete
 
-      # Deploy to Fly.io
-      - name: Setup Fly CLI
-        uses: superfly/flyctl-actions/setup-flyctl@master
-
-      - name: Deploy to Fly.io
-        run: flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      # Deploy to Railway
+      - name: Deploy to Railway
+        uses: bervProject/railway-deploy@v1.1.0
+        with:
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          service: ${{ secrets.RAILWAY_SERVICE_ID || 'wordpress-app' }}
+          detach: false

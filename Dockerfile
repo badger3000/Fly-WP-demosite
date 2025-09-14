@@ -13,8 +13,8 @@ RUN chown -R www-data:www-data /var/www/html/wp-content
 RUN find /var/www/html/wp-content -type d -exec chmod 755 {} \;
 RUN find /var/www/html/wp-content -type f -exec chmod 644 {} \;
 
-# Copy production wp-config
-COPY wp-config-production.php /var/www/html/wp-config.php
+# Copy Railway wp-config
+COPY wp-config-railway.php /var/www/html/wp-config.php
 
 # Enable mod_rewrite for pretty URLs
 RUN a2enmod rewrite
