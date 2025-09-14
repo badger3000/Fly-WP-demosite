@@ -2,7 +2,7 @@
 buildCommand = "./build-themes.sh"
 
 [deploy]
-healthcheckPath = "/wp-admin/admin-ajax.php"
+healthcheckPath = "/health.php"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 

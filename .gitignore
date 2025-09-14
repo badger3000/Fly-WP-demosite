@@ -16,6 +16,7 @@ wp-content/*
 !nixpacks.toml
 !wp-config-railway.php
 !build-themes.sh
+!start.sh
 !RAILWAY-SETUP.md
 !README.md
 !CLAUDE.md

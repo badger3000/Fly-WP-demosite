@@ -39,4 +39,17 @@ RUN chown -R www-data:www-data /var/www/html
 RUN find /var/www/html -type d -exec chmod 755 {} \;
 RUN find /var/www/html -type f -exec chmod 644 {} \;
 
+# Create a simple health check script
+RUN echo '<?php http_response_code(200); echo "OK"; ?>' > /var/www/html/health.php
+
+# Copy startup script
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+# Install curl for health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 EXPOSE 80
+
+# Use our startup script
+CMD ["/usr/local/bin/start.sh"]
