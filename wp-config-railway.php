@@ -33,15 +33,29 @@ define('WP_DEBUG', $_ENV['WP_DEBUG'] === 'true');
 define('WP_DEBUG_LOG', false);
 define('WP_DEBUG_DISPLAY', false);
 
-// Railway URL handling
+// Force HTTPS for Railway deployment
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+    $_SERVER['HTTPS'] = 'on';
+    $_SERVER['SERVER_PORT'] = 443;
+}
+
+// Railway URL handling with forced HTTPS
 if (isset($_ENV['RAILWAY_PUBLIC_DOMAIN'])) {
     define('WP_HOME', 'https://' . $_ENV['RAILWAY_PUBLIC_DOMAIN']);
     define('WP_SITEURL', 'https://' . $_ENV['RAILWAY_PUBLIC_DOMAIN']);
 } else {
-    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+    // For Railway, always assume HTTPS
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost:' . ($_ENV['PORT'] ?? 8000);
-    define('WP_HOME', $protocol . '://' . $host);
-    define('WP_SITEURL', $protocol . '://' . $host);
+    define('WP_HOME', 'https://' . $host);
+    define('WP_SITEURL', 'https://' . $host);
+}
+
+// Force SSL for admin and logins
+define('FORCE_SSL_ADMIN', true);
+
+// Fix mixed content issues - always use HTTPS
+if (!isset($_SERVER['HTTPS'])) {
+    $_SERVER['HTTPS'] = 'on';
 }
 
 // Performance Settings
