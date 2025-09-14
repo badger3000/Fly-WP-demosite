@@ -1,35 +1,45 @@
-app = "flywp"
-primary_region = "sjc"
+# fly.toml app configuration file generated for flywp on 2025-09-13T19:03:39-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'flywp'
+primary_region = 'sjc'
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = 'Dockerfile'
 
 [env]
-  WP_ENVIRONMENT_TYPE = "production"
-  WP_DEBUG = "false"
+  WP_DEBUG = 'false'
+  WP_ENVIRONMENT_TYPE = 'production'
+
+[[mounts]]
+  source = 'wp_uploads'
+  destination = '/var/www/html/wp-content/uploads'
 
 [http_service]
   internal_port = 80
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 1
 
   [http_service.concurrency]
-    type = "requests"
+    type = 'requests'
     hard_limit = 200
     soft_limit = 100
 
-[[mounts]]
-  source = "wp_uploads"
-  destination = "/var/www/html/wp-content/uploads"
-
 [checks]
   [checks.wordpress_health]
-    type = "http"
-    grace_period = "10s"
-    interval = "30s"
-    method = "get"
-    path = "/wp-admin/admin-ajax.php"
     port = 80
-    timeout = "5s"
+    type = 'http'
+    interval = '30s'
+    timeout = '5s'
+    grace_period = '10s'
+    method = 'get'
+    path = '/wp-admin/admin-ajax.php'
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

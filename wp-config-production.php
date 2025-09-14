@@ -9,7 +9,7 @@ if (isset($_ENV['DATABASE_URL'])) {
     define('DB_NAME', ltrim($db_parts['path'], '/'));
     define('DB_USER', $db_parts['user']);
     define('DB_PASSWORD', $db_parts['pass']);
-    define('DB_HOST', $db_parts['host'] . ':' . ($db_parts['port'] ?? 3306));
+    define('DB_HOST', $db_parts['host'] . ':' . ($db_parts['port'] ?? 5432));
 } else {
     define('DB_NAME', $_ENV['DB_NAME'] ?? 'wordpress');
     define('DB_USER', $_ENV['DB_USER'] ?? 'root');
