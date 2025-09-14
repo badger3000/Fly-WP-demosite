@@ -155,8 +155,14 @@ git push origin main              # Triggers GitHub Actions
 - Ensure `wp-config-railway.php` is being used in production
 - Verify database service is connected to application
 
+### HTTPS/Mixed Content Issues
+- `wp-config-railway.php` handles HTTPS detection automatically
+- Checks `HTTP_X_FORWARDED_PROTO` header from Railway proxy
+- Forces `$_SERVER['HTTPS'] = 'on'` when needed
+- Sets `FORCE_SSL_ADMIN = true` for admin security
+
 ### Deployment Issues
-- Check GitHub Actions logs for build failures
-- Verify Railway token in GitHub secrets
-- Check Railway dashboard deployment logs
-- Ensure all services are running in Railway dashboard
+- Check Railway deployment logs for container startup errors
+- Verify themes build successfully with `build-themes.sh`
+- Check Railway dashboard for service status and logs
+- Health checks disabled by default (container starts faster)

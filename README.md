@@ -31,16 +31,16 @@ This repository contains a WordPress site with custom themes deployed to Railway
 
 ## 🚀 Deployment Process
 
-1. **Push to main** → GitHub Actions triggered
-2. **Build ALL tracked themes automatically**:
+1. **Push to master** → Railway detects changes automatically
+2. **Build themes with `build-themes.sh`**:
    - Scans `wp-content/themes/` for any theme with `package.json`
    - Builds each theme with npm/composer
-   - Currently building: `sage10-fse`, `block-theme`
-3. **Clean up** development files (node_modules, etc.)
-4. **Deploy to Railway** automatically
-5. **WordPress runs** with Railway MySQL database
+   - Currently tracking: `sage10-fse`, `block-theme`
+3. **Create WordPress container** with built themes
+4. **Deploy to Railway** with HTTPS automatically enabled
+5. **WordPress runs** with managed Railway MySQL database
 
-**That's it!** Railway handles the rest automatically.
+**Result**: Live WordPress site at `https://yourapp.railway.app` 🎉
 
 ## 🛠️ Local Development
 
@@ -136,7 +136,8 @@ railway up
 ### wp-config-railway.php
 - Railway WordPress configuration
 - Reads database from Railway's `DATABASE_URL`
-- Environment-aware settings
+- **HTTPS/SSL configuration** for Railway proxy
+- Handles mixed content issues automatically
 - Performance and security settings
 
 ## 🚦 Commands
@@ -192,7 +193,8 @@ Railway automatically sets:
 
 Railway provides:
 - ✅ **Free subdomain**: `yourapp.railway.app`
-- ✅ **HTTPS** automatically enabled
+- ✅ **HTTPS** automatically enabled with SSL certificates
+- ✅ **Mixed content protection** built-in
 - ✅ **Custom domains** available on paid plans
 
 **Add Custom Domain:**

@@ -1,5 +1,5 @@
 [build]
-buildCommand = "echo 'Skipping theme build for now'"
+buildCommand = "./build-themes.sh"
 
 [environments.production]
 variables.WP_ENVIRONMENT_TYPE = "production"
