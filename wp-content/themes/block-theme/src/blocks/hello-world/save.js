@@ -3,14 +3,14 @@
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
  */
-import { RichText } from "@wordpress/block-editor";
+import { RichText } from '@wordpress/block-editor';
 /**
  * React hook that is used to mark the block wrapper element.
  * It provides all the necessary props like the class name.
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
  */
-import { useBlockProps } from "@wordpress/block-editor";
+import { useBlockProps } from '@wordpress/block-editor';
 
 /**
  * The save function defines the way in which the different attributes should
@@ -24,17 +24,19 @@ import { useBlockProps } from "@wordpress/block-editor";
 export default function save({ attributes }) {
 	return (
 		<div {...useBlockProps.save()}>
-			<div className="hello-world-image">
+			<div className="hello-world-image rounded-lg shadow-md">
 				<img
+					className="rounded-lg"
+					alt={attributes.alt}
 					src={
 						attributes.img
 							? attributes.img.sizes.full.url
-							: "https://via.placeholder.com/325x216"
+							: 'https://via.placeholder.com/325x216'
 					}
 				/>
 			</div>
 			<RichText.Content
-				className="hello-world-text"
+				className="hello-world-text text-blue-600 hover:text-blue-800 transition-colors duration-200"
 				tagName="h3"
 				value={attributes.content}
 			/>

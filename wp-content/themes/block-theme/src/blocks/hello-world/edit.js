@@ -112,8 +112,9 @@ export default function Edit(props) {
 					}
 				</ToolbarGroup>
 			</BlockControls>
-			<div className="hello-world-image">
+			<div className="hello-world-image rounded-lg shadow-md">
 				<img
+					className="rounded-lg"
 					src={
 						// If there is an image, show it, otherwise show a placeholder
 						media ? media.sizes.full.url : "https://via.placeholder.com/325x216"
@@ -124,7 +125,7 @@ export default function Edit(props) {
 					}
 				/>
 			</div>
-			<h3 className="hello-world-text">
+			<h3 className="hello-world-text text-blue-600 hover:text-blue-800 transition-colors duration-200">
 				<RichText
 					// This is the class name that will be added to the heading element
 					className="hello-world-text"
