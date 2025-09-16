@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/pothole/Local Sites/development/app/public/**)",
+      "Read(//Users/pothole/**)",
+      "Bash(nvm use:*)",
+      "Bash(npm install)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(nvm:*)",
+      "Bash(bash:*)",
+      "Bash(cat:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
